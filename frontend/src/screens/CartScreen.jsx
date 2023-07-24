@@ -12,10 +12,10 @@ const CartScreen = () => {
     const dispatch = useDispatch();
 
     // now testing
-    const [cartItems, setCartItems] = useState(['1', '2']);
+    // const [cartItems, setCartItems] = useState(['1', '2']);
 
-    // const cart = useSelector((state) => state.cart);
-    // const { cartItems } = cart;
+    const cart = useSelector((state) => state.cart);
+    const { cartItems } = cart;
         
     const addToCartHandler = async (product, qty) => {
         dispatch(addToCart({...product, qty}))

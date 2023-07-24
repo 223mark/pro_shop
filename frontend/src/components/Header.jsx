@@ -1,16 +1,44 @@
-import { useState } from 'react';
-import { Navbar, Nav, Container, Badge } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Navbar, Nav, Container, Badge, Image, NavDropdown } from 'react-bootstrap';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
-import {LinkContainer} from 'react-router-bootstrap'
+import { useDispatch, useSelector,  } from 'react-redux';
+import { LinkContainer } from 'react-router-bootstrap';
+import {useNavigate} from 'react-router-dom';
+
+
+import logo from '../assets/logo.png'
+import { logout } from '../slices/authSlice';
+import { useLogoutMutation } from '../slices/userApiSlice';
 
 const Header = () => {
-    // const { cartItems } = useSelector((state) => state.cart);
-
-    // const { cartItems, taxPrice } = useSelector((state) => state.cart);
-    const { cartItems } = useSelector((state) => state.cart);
-    console.log(cartItems);
     
+     
+    const { cartItems } = useSelector((state) => state.cart);
+
+    console.log(cartItems.length, 'count');
+    const { userInfo } = useSelector((state) => state.auth);
+    
+    
+    
+    console.log(typeof(userInfo), 'type?');
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+   
+   
+    
+    // we can give whatever we want instead of logoutApiCall
+     const [logoutApiCall] = useLogoutMutation();
+
+    const logoutHandler = () => {
+
+        try {
+            logoutApiCall().unwrap();
+            dispatch(logout());
+            navigate('/login')
+        } catch (error) {
+            console.log(error);
+        }
+    }
   return (
       <header>
           <Navbar bg='dark' variant='dark' expand='md' collapseOnSelect>
@@ -18,7 +46,7 @@ const Header = () => {
                   {/* .Brand is sub-component of navbar component */}
                   <LinkContainer to='/'>
                        <Navbar.Brand >
-                      ProShop
+                      <Image src={logo}/> Pro Shop
                   </Navbar.Brand>
                   </LinkContainer>
                   <Navbar.Toggle aria-controls='basic-navbar-env'></Navbar.Toggle>
@@ -27,17 +55,31 @@ const Header = () => {
                           <LinkContainer to='/cart'>
                               <Nav.Link >
                                   <FaShoppingCart /> Cart
-                                  {/* {cartItems.length > 0 && (
+                                  {
+                                  cartItems.length > 0 && (
                                       <Badge pill bg="success" style={{ marginLeft: "5px" }}>
-                                          { cartItems.reduce((a,c)=> a + c.qty) }
+                                           {cartItems.reduce((a, c) => a + c.qty, 0)}
                                       </Badge>
-                                  )} */}
+                                      )}
+                                 
                               </Nav.Link>
                               
                           </LinkContainer>
-                          <LinkContainer to='/login'>
+                          {userInfo ? (
+                              <NavDropdown title={userInfo.name} id="username">
+                                  <LinkContainer to="/profile">
+                                      <NavDropdown.Item>Profile</NavDropdown.Item>
+                                  </LinkContainer>
+                                  <NavDropdown.Item onClick={logoutHandler}>
+                                      Logout
+                                  </NavDropdown.Item>
+                           </NavDropdown>
+                          ): (
+                                  <LinkContainer to='/login'>
                               <Nav.Link ><FaUser /> Sign In</Nav.Link>
                           </LinkContainer>
+                          )}
+                          
                           
                       </Nav>
                   </Navbar.Collapse>
