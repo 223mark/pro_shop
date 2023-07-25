@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Navbar, Nav, Container, Badge, Image, NavDropdown } from 'react-bootstrap';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import { useDispatch, useSelector,  } from 'react-redux';
@@ -14,13 +13,8 @@ const Header = () => {
     
      
     const { cartItems } = useSelector((state) => state.cart);
-
-    console.log(cartItems.length, 'count');
     const { userInfo } = useSelector((state) => state.auth);
-    
-    
-    
-    console.log(typeof(userInfo), 'type?');
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
    
@@ -46,7 +40,8 @@ const Header = () => {
                   {/* .Brand is sub-component of navbar component */}
                   <LinkContainer to='/'>
                        <Navbar.Brand >
-                      <Image src={logo}/> Pro Shop
+                          {/* <Image src={logo} sty /> */}
+                          Pro Shop
                   </Navbar.Brand>
                   </LinkContainer>
                   <Navbar.Toggle aria-controls='basic-navbar-env'></Navbar.Toggle>
@@ -78,6 +73,20 @@ const Header = () => {
                                   <LinkContainer to='/login'>
                               <Nav.Link ><FaUser /> Sign In</Nav.Link>
                           </LinkContainer>
+                          )}
+                          {userInfo && userInfo.isAdmin && (
+                              <NavDropdown title='Admin' id="admin">
+                                  <LinkContainer to="/admin/productlist">
+                                      <NavDropdown.Item>Products</NavDropdown.Item>
+                                  </LinkContainer>
+                                   <LinkContainer to="/admin/userlist">
+                                      <NavDropdown.Item>Users</NavDropdown.Item>
+                                  </LinkContainer>
+                                   <LinkContainer to="/admin/orderlist">
+                                      <NavDropdown.Item>Orders</NavDropdown.Item>
+                                  </LinkContainer>
+                                  
+                           </NavDropdown>
                           )}
                           
                           
