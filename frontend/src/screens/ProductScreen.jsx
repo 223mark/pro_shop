@@ -12,6 +12,7 @@ import Rating from "../components/Rating";
 // slicies
 import { addToCart } from "../slices/cartSlice";
 import { useGetProductDetailsQuery, useCreateReviewMutation } from "../slices/productApiSlice";
+import Meta from "../components/Meta";
 
 
 
@@ -71,7 +72,8 @@ const ProductScreen = () => {
             </Message>
           ) : (
               <>
-                 <Row>
+                <Row>
+                  <Meta title={product.name}/>
         <Col md={5}>
           <Image src={product.image} alt="product.name" fluid/>
         </Col>

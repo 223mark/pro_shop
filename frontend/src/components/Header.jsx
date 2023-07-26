@@ -8,6 +8,7 @@ import {useNavigate} from 'react-router-dom';
 import logo from '../assets/logo.png'
 import { logout } from '../slices/authSlice';
 import { useLogoutMutation } from '../slices/userApiSlice';
+import SearchBox from './SearchBox';
 
 const Header = () => {
     
@@ -35,18 +36,19 @@ const Header = () => {
     }
   return (
       <header>
-          <Navbar bg='dark' variant='dark' expand='md' collapseOnSelect>
+          <Navbar bg='dark' variant='dark' expand='md' collapseOnSelect >
               <Container>
                   {/* .Brand is sub-component of navbar component */}
                   <LinkContainer to='/'>
                        <Navbar.Brand >
                           {/* <Image src={logo} sty /> */}
-                          Pro Shop
+                          ProShop
                   </Navbar.Brand>
                   </LinkContainer>
                   <Navbar.Toggle aria-controls='basic-navbar-env'></Navbar.Toggle>
                   <Navbar.Collapse id='basic-navbar-nav'>
                       <Nav className='ms-auto'>
+                          <SearchBox/>
                           <LinkContainer to='/cart'>
                               <Nav.Link >
                                   <FaShoppingCart /> Cart
