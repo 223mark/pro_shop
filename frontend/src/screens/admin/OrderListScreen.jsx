@@ -7,7 +7,6 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 const OrderListScreen = () => {
     const { data: orders, isLoading, error } = useGetOrdersQuery();
-    console.log(orders);
 
   return (
       <>

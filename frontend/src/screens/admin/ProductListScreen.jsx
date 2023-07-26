@@ -1,14 +1,49 @@
+// dependecies
 import { Button, Col, Row, Table } from 'react-bootstrap';
-import {useGetProductsQuery} from '../../slices/productApiSlice';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { LinkContainer } from 'react-router-bootstrap';
+import { toast } from 'react-toastify'
+
+// components
+import {
+    useGetProductsQuery,
+    useCreateProductMutation,
+    useUpdateProductMutation,
+    useDeleteProductMutation
+} from '../../slices/productApiSlice';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
-import { LinkContainer } from 'react-router-bootstrap';
-const ProductListScreen = () => {
-    const { data: products, isLoading, error } = useGetProductsQuery();
 
-    const deleteHandler = (productId) => {
-        
+const ProductListScreen = () => {
+    const { data: products, isLoading, error, refetch } = useGetProductsQuery();
+
+    const [createProduct, { isLoading: loadingCreate }] = useCreateProductMutation();
+
+    const [deleteProduct, { isLoading: loadingDelete }] = useDeleteProductMutation();
+    
+
+    const deleteHandler = async (productId) => {
+        if (window.confirm('Are you sure?')) {
+            try {
+                await deleteProduct(productId);
+                refetch();
+                toast.success('Product Deleted');
+            } catch (error) {
+                toast.error(error?.data?.message ||error.error)
+            }
+        }
+    }
+
+    const createProductHandler = async () => {
+        if (window.confirm('Are you sure you want to creat product')) {
+            try {
+                await createProduct();
+                refetch();
+                toast.success("Product created.")
+            } catch (error) {
+                toast.error(error?.data?.message || error.error)
+            }
+        }
     }
     return (
         <>
@@ -17,11 +52,15 @@ const ProductListScreen = () => {
                     <h2>Products</h2>
                 </Col>
                 <Col className='text-end'>
-                    <Button className='btn-sm m-3'>
-                        <FaEdit/> Creat Product
+                    <Button
+                        onClick={createProductHandler}
+                        className='btn-sm m-3'>
+                        <FaEdit/> Create Product
                     </Button>
                 </Col>
             </Row>
+            {loadingCreate && <Loader />}
+            {loadingDelete && <Loader/>}
             {isLoading ? <Loader /> : error
                 ? <Message variant='danger'>
                     {error?.data?.message || error.message}
@@ -47,7 +86,9 @@ const ProductListScreen = () => {
                                     <td>{product.brand}</td>
                                     <td>
                                         <LinkContainer to={`/admin/product/${product._id}/edit`}>
-                                            <Button variant='light' className='btn-sm mx-2'>
+                                            <Button
+                                                variant='light'
+                                                className='btn-sm mx-2'>
                                                 <FaEdit/>
                                             </Button>
                                         </LinkContainer>

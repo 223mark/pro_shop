@@ -1,13 +1,17 @@
+// dependecies imports
 import express from 'express'
 import dotenv from 'dotenv'
 import colors from 'colors'
 import cookieParser from 'cookie-parser'
+import path from 'path';
+
+// local imports 
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 import connectDB from './config/db.js'
-
 import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import ordrRoutes from './routes/orderRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
 
 dotenv.config()
 
@@ -27,9 +31,15 @@ app.use(cookieParser())
 app.use('/api/products', productRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/orders', ordrRoutes)
+app.use('/api/upload', uploadRoutes)
+
 
 app.get('/api/config/paypal', (req,res) => res.send({clientId: process.env.PAYPAL_CLIENT_ID}))
 
+
+// give access to read uploads file
+const __dirname = path.resolve();  //Set __dirname to current directory
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 
 // error middlewore funcs
