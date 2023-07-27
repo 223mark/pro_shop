@@ -72,17 +72,16 @@ const ProductEditScreen = () => {
 
     const uploadFileHandler = async (e) => {
         const formData = new FormData();
-        formData.append('image', e.target.files[0]);
         console.log(formData);
-
-        try {
-            const res = await uploadProductImage(formData).unwrap();
-            toast.success(res.message)
-            setImage(res.image);
-        } catch (error) {
-            toast.error(error?.data?.message || error.message)
-        }
+    formData.append('image', e.target.files[0]);
+    try {
+      const res = await uploadProductImage(formData).unwrap();
+      toast.success(res.message);
+      setImage(res.image);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     }
+  };
   return (
       <>
           <Link to='/admin/productlist' className='btn btn-light my-3' >
@@ -129,7 +128,7 @@ const ProductEditScreen = () => {
                                   <FormControl
                                       type="file"
                                       label="Choose File"
-                                      onChange={(e) => uploadFileHandler(e)}
+                                      onChange={ uploadFileHandler}
                                   />      
                               </FormGroup>
                               

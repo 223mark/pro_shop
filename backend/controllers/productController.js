@@ -7,9 +7,9 @@ import Product from '../models/productModel.js';
 // @route  GET /api/products
 // @access Public
 const getProducts = asyncHandler(async (req, res) => {
-    const pageSize = 8;
+    const pageSize = 6;
     const page = Number(req.query.pageNumber) || 1;
-
+    
     const keyword = req.query.keyword
         ? {
             // i for case-sensetive
@@ -18,6 +18,7 @@ const getProducts = asyncHandler(async (req, res) => {
         : {}
     // we will get filterd data if we have search keyword
     const count = await Product.countDocuments({ ...keyword });
+   
     const products = await Product.find({...keyword})
         .limit(pageSize)
         .skip(pageSize * (page - 1));

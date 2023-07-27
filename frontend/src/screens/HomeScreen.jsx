@@ -33,7 +33,11 @@ const HomeScreen = () => {
                  <Meta/>
                 <h1>Latest Products</h1>
           <Row>
-              
+              {
+                    data.products.length === 0 && 
+                   <h5 className='bg-success text-white py-4 text-center mt-5'>There is no related products.</h5>
+                    
+              }
               {data.products && data.products.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                 <Product product={product} />
