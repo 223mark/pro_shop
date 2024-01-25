@@ -33,7 +33,7 @@ app.use('/api/users', userRoutes)
 app.use('/api/orders', ordrRoutes)
 app.use('/api/uploads', uploadRoutes)
 
-
+// Pyapal config
 app.get('/api/config/paypal', (req, res) => res.send({ clientId: process.env.PAYPAL_CLIENT_ID }))
 
 if (process.env.NODE_ENV === 'production') {
